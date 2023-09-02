@@ -4,18 +4,35 @@ import { useTheme } from '@mui/material/styles'
 import { randomInt } from 'd3-random'
 import { color } from 'd3-color'
 import { useWindowSize } from 'usehooks-ts'
-
+import mapboxgl from 'mapbox-gl'
+import { decode, encode } from '@googlemaps/polyline-codec'
 import { motion } from 'framer-motion'
-import _ from 'lodash'
 import { Box, Button } from '@mui/material'
+import _ from 'lodash'
+import { Stops } from './stops'
 
-export const Map = ({ vehicles, stops, map, shapes, mapContainer }) => {
+export const Map = ({ mbta }) => {
   const { width, height } = useWindowSize()
   const theme = useTheme()
 
-  console.log(map)
+  const mapContainer = useRef(null)
+  const map = useRef(null)
 
-  useEffect(() => {}, [])
+  mapboxgl.accessToken =
+    'pk.eyJ1IjoiZW11bm4iLCJhIjoiY2w2bWoxNWp6MGx6ajNicnVqM3YyZ2M0NiJ9.8CG8a8G7qY6mrF3Yk-Kx1g'
+
+  useEffect(() => {
+    if (map.current) return // initialize map only once
+    map.current = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: 'mapbox://styles/emunn/cleqdxw1m003s01ne3dw9xc9t',
+      center: [-71.058, 42.3601],
+      zoom: 10,
+      projection: {
+        name: 'albers',
+      },
+    })
+  })
 
   return (
     <Box sx={{ position: 'relative' }}>
@@ -29,28 +46,7 @@ export const Map = ({ vehicles, stops, map, shapes, mapContainer }) => {
         ref={mapContainer}
         className="map-container"
       />
-      <motion.svg
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vw',
-          pointerEvents: 'none',
-        }}
-      >
-        {shapes?.map((d, i) => (
-          <motion.path
-            key={'stop-' + d.id}
-            animate={{
-              d: `M` + d.polyline.map((d) => `${d.x},${d.y}`).join(`L`),
-            }}
-            stroke={'red'}
-            fill={'none'}
-            strokeWidth={2}
-          />
-        ))}
-      </motion.svg>
+      {map.current && <Stops map={map} />}
     </Box>
   )
 }
