@@ -11,10 +11,10 @@ const Foot = ({}) => {
 
   return (
     <>
-      <footer style={{ background: theme.palette.white[0] }}>
+      <footer style={{ background: theme.palette.white.main }}>
         <motion.div
           className="logos"
-          style={{ background: theme.palette.white[0] }}
+          style={{ background: theme.palette.white.main }}
         ></motion.div>
       </footer>
     </>

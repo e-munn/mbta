@@ -3,7 +3,7 @@ import './App.css'
 import '@aws-amplify/ui-react/styles.css'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import Head from './main/head/head'
-import Intro from './main/intro'
+import { Main } from './main/main'
 
 import { ThemeProvider } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
@@ -23,7 +23,7 @@ const App = ({}) => {
           <CssBaseline />
           <Routes location={location} key={location.pathname}>
             <Route path={'/'} element={<Head />}>
-              <Route index element={<Intro />} />
+              <Route index element={<Main />} />
             </Route>
           </Routes>
         </AnimatePresence>

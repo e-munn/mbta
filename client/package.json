@@ -5,9 +5,13 @@
   "dependencies": {
     "@aws-amplify/datastore": "^3.14.0",
     "@aws-amplify/ui-react": "^3.5.9",
+    "@deck.gl/layers": "^8.9.27",
+    "@deck.gl/mapbox": "^8.9.27",
+    "@deck.gl/react": "^8.9.27",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@googlemaps/polyline-codec": "^1.0.28",
+    "@loaders.gl/obj": "^3.4.14",
     "@microsoft/fetch-event-source": "^2.0.1",
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.11",
@@ -18,9 +22,11 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@turf/turf": "^6.5.0",
     "aws-amplify": "^4.3.39",
     "axios": "^1.5.0",
     "d3": "^7.6.1",
+    "deck.gl": "^8.9.27",
     "framer-motion": "^7.6.5",
     "mbta-client": "^1.1.10",
     "moment": "^2.29.4",
@@ -57,5 +63,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@deck.gl/mesh-layers": "^8.9.27",
+    "mapbox-gl": "^2.15.0"
   }
 }

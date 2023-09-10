@@ -1,54 +1,65 @@
 import { useEffect, useState, useRef } from 'react'
-import 'mapbox-gl/dist/mapbox-gl.css'
 import { useTheme } from '@mui/material/styles'
-import { randomInt } from 'd3-random'
-import { color } from 'd3-color'
 import { useWindowSize } from 'usehooks-ts'
-import mapboxgl from 'mapbox-gl'
-import { decode, encode } from '@googlemaps/polyline-codec'
-import { motion } from 'framer-motion'
-import { Box, Button } from '@mui/material'
-import _ from 'lodash'
+import { Box } from '@mui/material'
 import { Stops } from './stops'
+import { Routes } from './routes'
+
+import { Map, useMap } from 'react-map-gl'
+import _ from 'lodash'
+import DeckGL from '@deck.gl/react'
+import { useCounter, useInterval } from 'usehooks-ts'
 import { Vehicles } from './vehicles'
+const initial = {
+  longitude: -71.09,
+  latitude: 42.3601,
+  zoom: 12,
+}
 
-export const Map = ({ mbta }) => {
+export const MapBox = ({ setCard }) => {
   const { width, height } = useWindowSize()
-  const theme = useTheme()
+  const [viewState, setViewState] = useState(initial)
+  const [vehicles, setVehicles] = useState([])
+  const [stops, setStops] = useState([])
+  const [routes, setRoutes] = useState([])
 
-  const mapContainer = useRef(null)
-  const map = useRef(null)
+  const layers = [stops, routes, ..._.flatten(vehicles)]
 
-  mapboxgl.accessToken =
-    'pk.eyJ1IjoiZW11bm4iLCJhIjoiY2w2bWoxNWp6MGx6ajNicnVqM3YyZ2M0NiJ9.8CG8a8G7qY6mrF3Yk-Kx1g'
+  const handleViewStateChange = ({ viewState }) => setViewState(viewState)
 
-  useEffect(() => {
-    if (map.current) return // initialize map only once
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/emunn/cleqdxw1m003s01ne3dw9xc9t',
-      center: [-71.058, 42.3601],
-      zoom: 12,
-      projection: {
-        name: 'albers',
-      },
-    })
-  })
+  const { current: map } = useMap()
+  console.log(map)
 
   return (
-    <Box sx={{ position: 'relative' }}>
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          cursor: 'default',
-        }}
-        ref={mapContainer}
-        className="map-container"
+    <>
+      <DeckGL
+        initialViewState={initial}
+        controller={{ doubleClickZoom: false }}
+        layers={layers}
+        onViewStateChange={handleViewStateChange}
+        getCursor={() => 'crosshair'}
+      >
+        <Map
+          mapboxAccessToken={
+            'pk.eyJ1IjoiZW11bm4iLCJhIjoiY2w2bWoxNWp6MGx6ajNicnVqM3YyZ2M0NiJ9.8CG8a8G7qY6mrF3Yk-Kx1g'
+          }
+          // projection={'albers'}
+          style={{ width: width, height: height }}
+          mapStyle="mapbox://styles/emunn/clm2nc5i7025m01qx0ooe977f"
+        />
+      </DeckGL>
+      <Vehicles
+        vehicles={vehicles}
+        setVehicles={setVehicles}
+        viewState={viewState}
       />
-      {map.current && <Stops map={map} />}
-      {map.current && <Vehicles map={map} />}
-    </Box>
+      <Stops
+        stops={stops}
+        setStops={setStops}
+        viewState={viewState}
+        setCard={setCard}
+      />
+      <Routes routes={routes} setRoutes={setRoutes} viewState={viewState} />
+    </>
   )
 }

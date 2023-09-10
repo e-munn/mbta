@@ -4,6 +4,9 @@ import _ from 'lodash'
 import * as d3 from 'd3'
 import { IconLayer, TextLayer } from '@deck.gl/layers'
 import { colormap } from './data/tools'
+import { SimpleMeshLayer } from '@deck.gl/mesh-layers'
+import { OBJLoader } from '@loaders.gl/obj'
+import { CubeGeometry } from '@luma.gl/engine'
 
 export const Vehicles = ({ vehicles, setVehicles, viewState }) => {
   const [data, setData] = useState([])
@@ -20,32 +23,29 @@ export const Vehicles = ({ vehicles, setVehicles, viewState }) => {
     setVehicles(
       data.map((v) => {
         return [
-          new IconLayer({
+          new SimpleMeshLayer({
             id: v.id,
             data: [v],
-            iconAtlas:
-              'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/icon-atlas.png',
-            iconMapping: {
-              marker: { x: 0, y: 0, width: 128, height: 128, mask: true },
-            },
-            billboard: false,
-            pickable: false,
-            sizeScale: 1,
-            sizeUnits: 'meters',
-            getSize: (d) => d3.scaleLinear([10, 20], [100, 20])(viewState.zoom),
-            getIcon: (d) => 'marker',
-            getPosition: (d) => [v.attributes.longitude, v.attributes.latitude],
+            mesh: new CubeGeometry(),
+            // loaders: [OBJLoader],
+            getPosition: (d) => [
+              v.attributes.longitude,
+              v.attributes.latitude,
+              40,
+            ],
             getColor: (d) =>
               _.values(
                 d3.color(colormap[v.relationships.route.data.id])
               ).splice(0, 3),
-            getAngle: (d) => 180 - d.attributes.bearing,
+            getOrientation: (d) => [0, 180 - d.attributes.bearing, 0],
+            sizeScale: 40,
+            pickable: false,
             transitions: {
               getPosition: {
                 duration: 2000,
                 easing: d3.easeSin,
               },
-              getAngle: {
+              getOrientation: {
                 duration: 2000,
                 easing: d3.easeSin,
               },

@@ -24,9 +24,7 @@ const Head = ({ user }) => {
 
   return (
     <>
-      <header style={{ background: theme.palette.white[0] }}></header>
       <Outlet />
-      <Foot />
     </>
   )
 }
