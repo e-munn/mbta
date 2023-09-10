@@ -4,7 +4,7 @@ import { MapBox } from './map'
 import { Box, Button } from '@mui/material'
 import _ from 'lodash'
 import { Card } from './card'
-import { Search } from './search'
+import { Controls } from './control/controls'
 import { useClickAnyWhere } from 'usehooks-ts'
 
 const KEY = '488fd0453fbd42299dfd42666230f022'
@@ -26,6 +26,7 @@ export const Main = () => {
     >
       {card && <Card card={card} setCard={setCard} />}
       <MapBox setCard={setCard} />
+      <Controls />
       {/* <Search /> */}
     </Box>
   )

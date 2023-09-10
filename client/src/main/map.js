@@ -2,14 +2,15 @@ import { useEffect, useState, useRef } from 'react'
 import { useTheme } from '@mui/material/styles'
 import { useWindowSize } from 'usehooks-ts'
 import { Box } from '@mui/material'
-import { Stops } from './stops'
-import { Routes } from './routes'
+import { Stops } from './network/stops'
+import { Routes } from './network/routes'
+import { Vehicles } from './network/vehicles'
+import { Stoptext } from './network/stoptext'
 
 import { Map, useMap } from 'react-map-gl'
 import _ from 'lodash'
 import DeckGL from '@deck.gl/react'
 import { useCounter, useInterval } from 'usehooks-ts'
-import { Vehicles } from './vehicles'
 const initial = {
   longitude: -71.09,
   latitude: 42.3601,
@@ -20,15 +21,14 @@ export const MapBox = ({ setCard }) => {
   const { width, height } = useWindowSize()
   const [viewState, setViewState] = useState(initial)
   const [vehicles, setVehicles] = useState([])
+  const [stoptext, setStoptext] = useState([])
   const [stops, setStops] = useState([])
+
   const [routes, setRoutes] = useState([])
 
-  const layers = [stops, routes, ..._.flatten(vehicles)]
+  const layers = [routes, stops, ..._.flatten(vehicles)]
 
   const handleViewStateChange = ({ viewState }) => setViewState(viewState)
-
-  const { current: map } = useMap()
-  console.log(map)
 
   return (
     <>
@@ -45,7 +45,7 @@ export const MapBox = ({ setCard }) => {
           }
           // projection={'albers'}
           style={{ width: width, height: height }}
-          mapStyle="mapbox://styles/emunn/clm2nc5i7025m01qx0ooe977f"
+          mapStyle="mapbox://styles/emunn/clmcxqi0p015p01rcceeu615r"
         />
       </DeckGL>
       <Vehicles
@@ -59,6 +59,7 @@ export const MapBox = ({ setCard }) => {
         viewState={viewState}
         setCard={setCard}
       />
+      <Stoptext stoptext={stoptext} setStoptext={setStoptext} />
       <Routes routes={routes} setRoutes={setRoutes} viewState={viewState} />
     </>
   )

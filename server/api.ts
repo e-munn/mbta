@@ -15,7 +15,7 @@ router.get(
     prepStream(res)
 
     const response = await axios.get(
-      'https://api-v3.mbta.com/vehicles?filter[route_type]=0,1',
+      'https://api-v3.mbta.com/vehicles?filter[route]=Red,Orange,Blue,Green-B,Green-C,Green-D,Green-E',
       {
         headers: {
           'X-API-Key': '488fd0453fbd42299dfd42666230f022',

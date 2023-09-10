@@ -11,15 +11,13 @@ export const Search = () => {
     //   })
   }, [])
   return (
-    <Stack sx={{ m: 1, position: 'absolute', top: 0, left: 0 }}>
-      <Autocomplete
-        disablePortal
-        id="combo-box-demo"
-        options={[]}
-        sx={{ width: 300 }}
-        onInputChange={(e, v) => console.log(v)}
-        renderInput={(params) => <TextField {...params} label={'Search'} />}
-      />
-    </Stack>
+    <Autocomplete
+      disablePortal
+      id="combo-box-demo"
+      options={[]}
+      sx={{ width: 300 }}
+      onInputChange={(e, v) => console.log(v)}
+      renderInput={(params) => <TextField {...params} label={'Search'} />}
+    />
   )
 }
